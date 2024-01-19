@@ -4,10 +4,13 @@ import { ROUND_CARDS_AMOUNT, POKEAPI_URL } from './utils/constants';
 import getPokemonNamesForRound from './utils/getPokemonNamesForRound';
 import Pokemon from './utils/pokemon';
 import Score from './components/score';
+import Card from './components/card';
+import './styles/app.sass';
 
 export default function App() {
   const [bestScore, setBestScore] = useState(0);
   const [currentScore, setCurrentScore] = useState(0);
+  const [caughtPokemonNames, setCaughtPokemonNames] = useState<string[]>([]);
   const [roundPokemons, setRoundPokemons] = useState<Pokemon[]>([]);
 
   useEffect(() => {
@@ -20,6 +23,11 @@ export default function App() {
     );
 
     const roundNames = getPokemonNamesForRound();
+
+    if (roundNames.every((name) => caughtPokemonNames.includes(name))) {
+      setRoundPokemons([]);
+    }
+
     const _roundPokemons: Pokemon[] = [];
 
     roundNames.forEach(async (name, i) => {
@@ -41,6 +49,26 @@ export default function App() {
   return (
     <>
       <Score bestScore={bestScore} currentScore={currentScore} />
+
+      {roundPokemons.length ? (
+        <div className="card__wrapper">
+          {roundPokemons.map((pokemon) => (
+            <Card
+              pokemon={pokemon}
+              bestScore={bestScore}
+              setBestScore={setBestScore}
+              currentScore={currentScore}
+              setCurrentScore={setCurrentScore}
+              caughtPokemonNames={caughtPokemonNames}
+              setCaughtPokemonNames={setCaughtPokemonNames}
+              setRoundPokemons={setRoundPokemons}
+              key={pokemon.name}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="spinner">Loading...</div>
+      )}
     </>
   );
 }

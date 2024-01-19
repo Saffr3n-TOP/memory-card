@@ -1,0 +1,23 @@
+.card
+  $size: clamp(90px, 40vw, 250px)
+
+  display: grid
+  border: 1px solid
+  background-color: white
+  color: black
+  font-family: inherit
+  font-size: inherit
+  line-height: inherit
+  cursor: pointer
+
+  &__wrapper
+    display: grid
+    grid-template-columns: repeat(2, $size)
+    justify-content: center
+    gap: 0.5rem
+
+  &__img
+    height: $size
+
+  &__txt
+    text-align: center
